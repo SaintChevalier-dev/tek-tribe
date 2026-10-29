@@ -1,0 +1,52 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'">
+<title>Tek Tribe front door: DRAFT (offline)</title><style>
+body{background:#14121c;color:#e8e2d0;font-family:Georgia,serif;max-width:760px;margin:36px auto;padding:0 16px}
+.b{display:inline-block;background:#5a1e1e;color:#ffd7d7;padding:4px 10px;border-radius:4px;font:bold 13px monospace;letter-spacing:2px}
+h1{color:#d9b85c}h2{color:#b9a46a;font-size:16px;text-transform:uppercase;margin-top:28px}
+.c{border:1px solid #6b5a2e;border-radius:8px;padding:10px 14px;margin:10px 0;background:#1d1a28}
+.flow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.flow .c{flex:1;min-width:150px;text-align:center}
+table{border-collapse:collapse;width:100%}td,th{border:1px solid #3d3550;padding:6px;text-align:left;font-size:14px}
+code{color:#9fd}.o{color:#ffb86b;font-weight:bold}.u{color:#888;font-style:italic}
+</style></head><body>
+<span class="b">DRAFT &middot; OFFLINE &middot; CONNECTS TO NOTHING</span>
+<h1>Tek Tribe World: front door</h1>
+<p>Planned address (text only, not live): <code>play.cloverkingdom.net</code>. The live site stays <code>cloverkingdom.net</code>, and Apply is the only way to join.</p>
+<p class="u">Source: docs/SPEC_FRONT_DOOR.md. No login, no Supabase project, no DNS change.</p>
+
+<h2>Handoff: approval to login</h2>
+<div class="flow">
+<div class="c">1. Apply approved<br><small>on the live site</small></div>&rarr;
+<div class="c">2. Invite issued<br><small>code or link</small></div>&rarr;
+<div class="c">3. Player uses the invite at <code>/login</code></div>
+</div>
+
+<h2>Four doors (in order)</h2>
+<div class="c"><b>1. Invite-only login</b> (<code>/login</code>). Supabase invite only. The player enters the invite code or clicks the invite link. No open signup.</div>
+<div class="c"><b>2. Membership check</b> (<code>/gate</code>). Confirms the logged-in player is a member. Membership is game access, with no bypass.</div>
+<div class="c"><b>3. Spawn</b> (<code>/spawn</code>). Places the player at their start point (default: start). No spawn without membership.</div>
+<div class="c"><b>4. First view</b> (<code>/world</code>). Party, active quest and one next move.</div>
+
+<h2>Blocked notes (<code>/blocked</code>)</h2>
+<table><tr><th>Failure</th><th>Blocked note</th><th>Way forward</th></tr>
+<tr><td>No invite</td><td>"No invite. Apply on cloverkingdom.net."</td><td>Apply</td></tr>
+<tr><td>Invite expired</td><td>"Invite expired. Request a new one."</td><td>Apply</td></tr>
+<tr><td>Login fails</td><td>"Login failed. Try the invite again."</td><td>Back to /login</td></tr>
+<tr><td>Not a member</td><td>"Not a member. Game access is membership."</td><td>Apply</td></tr>
+<tr><td>Membership check fails</td><td>"Membership check failed. Retry."</td><td>Retry /gate</td></tr>
+<tr><td>Spawn fails</td><td>"Spawn failed. Retry."</td><td>Retry /spawn</td></tr>
+<tr><td>First view empty</td><td>"No first view. One next move is missing."</td><td>Retry /world</td></tr>
+</table>
+<p>A failure logs a blocked note. No XP is lost. The player can retry or drop back to Apply.</p>
+
+<h2>OPEN (the spec doesn't say)</h2>
+<div class="c">
+<span class="o">OPEN</span> Who or what issues the invite after approval, and how it reaches the player.<br>
+<span class="o">OPEN</span> How long an invite lasts before it expires.<br>
+<span class="o">OPEN</span> Whether one invite works once or more than once.<br>
+<span class="o">OPEN</span> Where the blocked notes are stored.<br>
+<span class="o">OPEN</span> What "start" is as a spawn point in the world.<br>
+<span class="o">OPEN</span> Which schema holds the membership table.
+</div>
+<p class="u">You open this page and confirm the order. That's the "done" the spec asks for.</p>
+</body></html>
